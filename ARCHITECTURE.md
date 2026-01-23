@@ -24,11 +24,13 @@ Alias Pro follows **Clean Architecture** principles with a feature-first organiz
 **Responsibility**: UI and user interaction
 
 **Components**:
+
 - **Screens**: Full-page views (HomeScreen, GameScreen, etc.)
 - **Widgets**: Reusable UI components (CustomButton, CategoryCard)
 - **Providers**: State management using Riverpod
 
 **Example**:
+
 ```dart
 // Provider
 final gameProvider = StateNotifierProvider<GameNotifier, Game?>(
@@ -50,16 +52,19 @@ class GameScreen extends ConsumerWidget {
 **Responsibility**: Business logic and entities
 
 **Components**:
+
 - **Entities**: Pure Dart classes (Game, Category, GameResult)
 - **Use Cases**: Business operations (optional in MVP)
 
 **Rules**:
+
 - No dependencies on other layers
 - Pure Dart code (no Flutter imports)
 - Immutable entities
 - Strong typing (no `dynamic`)
 
 **Example**:
+
 ```dart
 class Game {
   final String categoryId;
@@ -85,12 +90,14 @@ class Game {
 **Responsibility**: Data access and persistence
 
 **Components**:
+
 - **Repositories**: Abstract data access
 - **Data Sources**: Concrete implementations
   - Local: SharedPreferences
   - Remote: Firebase (Auth, Firestore)
 
 **Example**:
+
 ```dart
 // Repository
 class CategoryRepository {
@@ -110,6 +117,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>(
 ### Provider Types Used
 
 1. **Provider**: Immutable dependencies
+
    ```dart
    final authDatasourceProvider = Provider<FirebaseAuthDatasource>(
      (ref) => FirebaseAuthDatasource(),
@@ -117,6 +125,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>(
    ```
 
 2. **StateNotifierProvider**: Mutable state
+
    ```dart
    final gameProvider = StateNotifierProvider<GameNotifier, Game?>(
      (ref) => GameNotifier(ref),
@@ -124,6 +133,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>(
    ```
 
 3. **FutureProvider**: Async data loading
+
    ```dart
    final categoriesProvider = FutureProvider<List<Category>>(
      (ref) async => await ref.read(categoryRepositoryProvider).loadCategories(),
@@ -181,6 +191,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 ```
 
 **Navigation Usage**:
+
 ```dart
 // Navigate to game
 context.go('/game/animals');
@@ -247,9 +258,9 @@ final localStorageProvider = Provider<LocalStorageDatasource>(
 // Inject dependency
 class GameNotifier extends StateNotifier<Game?> {
   GameNotifier(this._ref) : super(null);
-  
+
   final Ref _ref;
-  
+
   void saveResult() {
     final storage = _ref.read(localStorageProvider);
     storage.saveGameResult(/* ... */);
@@ -260,6 +271,7 @@ class GameNotifier extends StateNotifier<Game?> {
 ## Testing Strategy
 
 ### Unit Tests
+
 - Test domain entities
 - Test business logic in notifiers
 - Mock dependencies using Riverpod override
@@ -277,6 +289,7 @@ void main() {
 ```
 
 ### Widget Tests (Future)
+
 ```dart
 testWidgets('GameScreen shows timer', (tester) async {
   await tester.pumpWidget(
@@ -291,16 +304,19 @@ testWidgets('GameScreen shows timer', (tester) async {
 ## Performance Considerations
 
 ### Provider Optimization
+
 - Use `.autoDispose` for temporary state
 - Use `.family` for parameterized providers
 - Minimize provider rebuilds with `select`
 
 ### Memory Management
+
 - Timer disposal in `TimerNotifier`
 - Stream subscription cleanup
 - Asset caching
 
 ### Build Optimization
+
 - `const` constructors everywhere
 - `ListView.builder` for lists
 - Separate stateful/stateless widgets
@@ -308,6 +324,7 @@ testWidgets('GameScreen shows timer', (tester) async {
 ## Security
 
 ### Firebase Rules
+
 ```javascript
 // Firestore Security Rules
 match /users/{userId} {
@@ -317,6 +334,7 @@ match /users/{userId} {
 ```
 
 ### Data Validation
+
 - Input sanitization in providers
 - Type checking with null safety
 - Score bounds enforcement
@@ -324,6 +342,7 @@ match /users/{userId} {
 ## Future Architecture Enhancements
 
 ### Sprint 2+
+
 - **Use Cases Layer**: Extract complex business logic
 - **DTOs**: Separate data models from domain entities
 - **Error Handling**: Custom exception hierarchy
@@ -331,6 +350,7 @@ match /users/{userId} {
 - **Analytics**: Event tracking layer
 
 ### Scalability
+
 - **Modular Features**: Extract features to packages
 - **Code Generation**: freezed for immutability
 - **API Layer**: Abstract backend communication

@@ -1,0 +1,21 @@
+{
+  "name": "alias-pro",
+  "version": "1.0.0",
+  "description": "Alias Pro - Flutter word guessing game",
+  "scripts": {
+    "build": "flutter build web --release --web-renderer canvaskit",
+    "deploy": "netlify deploy --prod",
+    "dev": "netlify dev"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "keywords": [
+    "flutter",
+    "game",
+    "alias",
+    "netlify"
+  ],
+  "author": "Alias Pro Team",
+  "license": "MIT"
+}

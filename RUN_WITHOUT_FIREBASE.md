@@ -14,17 +14,20 @@ cd C:\Users\pc\Apps\alias-pro
 ### 2. Що працює БЕЗ Firebase:
 
 ✅ **Повний ігровий процес**
+
 - Вибір категорії
 - Гра з таймером
 - Підрахунок балів
 - Результати
 
 ✅ **Локальне збереження**
+
 - Рекорди зберігаються локально
 - Статистика по категоріях
 - Профіль користувача
 
 ❌ **Не працює БЕЗ Firebase:**
+
 - Онлайн авторизація (використовується anonymous auth)
 - Синхронізація між пристроями
 
@@ -33,11 +36,12 @@ cd C:\Users\pc\Apps\alias-pro
 Для запуску без Firebase, закоментуйте Firebase ініціалізацію:
 
 **lib/main.dart:**
+
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();  // <-- закоментуйте цей рядок
-  
+
   runApp(
     const ProviderScope(
       child: AliasProApp(),
@@ -47,6 +51,7 @@ void main() async {
 ```
 
 **lib/config/routes.dart:**
+
 ```dart
 redirect: (context, state) async {
   // Закоментуйте Firebase auth
@@ -54,7 +59,7 @@ redirect: (context, state) async {
   // if (authState.value == null) {
   //   await ref.read(authNotifierProvider).signInAnonymously();
   // }
-  
+
   return null;
 },
 ```
@@ -95,12 +100,14 @@ class MockFirebaseAuth {
 ```
 
 **Переваги локального режиму:**
+
 - ✅ Швидкий старт
 - ✅ Не потрібен інтернет
 - ✅ Всі дані локально
 - ✅ Повна приватність
 
 **Коли потрібен Firebase:**
+
 - Синхронізація між пристроями
 - Онлайн лідерборди
 - Бекап даних у хмарі

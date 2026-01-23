@@ -1,5 +1,9 @@
 # Alias Pro - Flutter MVP
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-SITE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE-NAME/deploys)
+[![Flutter](https://img.shields.io/badge/Flutter-3.41.0-02569B?logo=flutter)](https://flutter.dev)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Production-ready Alias гра на Flutter з Clean Architecture, Riverpod та Firebase.
 
 ## 🎯 Функціональність MVP
@@ -75,23 +79,25 @@ lib/
 
 ```yaml
 dependencies:
-  flutter_riverpod: ^2.4.10      # State Management
-  firebase_core: ^2.24.0          # Firebase Core
-  firebase_auth: ^4.14.0          # Authentication
-  cloud_firestore: ^4.14.0        # Database
-  go_router: ^12.0.0              # Navigation
-  shared_preferences: ^2.2.2      # Local Storage
+  flutter_riverpod: ^2.4.10 # State Management
+  firebase_core: ^2.24.0 # Firebase Core
+  firebase_auth: ^4.14.0 # Authentication
+  cloud_firestore: ^4.14.0 # Database
+  go_router: ^12.0.0 # Navigation
+  shared_preferences: ^2.2.2 # Local Storage
 ```
 
 ## 🚀 Встановлення
 
 ### 1. Клонуйте репозиторій
+
 ```bash
 git clone <repository-url>
 cd alias-pro
 ```
 
 ### 2. Встановіть залежності
+
 ```bash
 flutter pub get
 ```
@@ -99,20 +105,53 @@ flutter pub get
 ### 3. Налаштуйте Firebase
 
 #### iOS
+
 1. Створіть проект у [Firebase Console](https://console.firebase.google.com/)
 2. Додайте iOS app
 3. Завантажте `GoogleService-Info.plist`
 4. Помістіть у `ios/Runner/`
 
 #### Android
+
 1. У Firebase Console додайте Android app
 2. Завантажте `google-services.json`
 3. Помістіть у `android/app/`
 
 ### 4. Запустіть додаток
+
 ```bash
 flutter run
 ```
+
+## 🚀 Деплой
+
+### Netlify (Recommended)
+
+```bash
+# Build для production
+flutter build web --release --web-renderer canvaskit
+
+# Або використайте build script
+build.bat  # Windows
+./build.sh # Linux/Mac
+
+# Deploy через Netlify CLI
+netlify deploy --prod
+```
+
+📖 Детальна інструкція: [NETLIFY_DEPLOYMENT.md](NETLIFY_DEPLOYMENT.md)
+
+### Firebase Hosting
+
+```bash
+firebase init hosting
+flutter build web --release
+firebase deploy --only hosting
+```
+
+## 🌐 Live Demo
+
+🔗 **[https://alias-pro.netlify.app](https://your-site-name.netlify.app)** (після деплою)
 
 ## 🧪 Тестування
 
@@ -130,12 +169,14 @@ flutter test --coverage
 ## 🎮 Ігрова логіка
 
 ### Правила
+
 - **Тривалість**: 90 секунд
 - **Вгадано**: +1 бал
 - **Пропуск**: -1 бал (мінімум 0)
 - **Перемога**: максимум балів за час
 
 ### Екрани Flow
+
 ```
 Home Screen
     ↓
@@ -155,16 +196,19 @@ Result Screen (статистика)
 ### Riverpod Providers
 
 **Game Providers:**
+
 - `gameProvider` - поточна гра (StateNotifierProvider)
 - `timerProvider` - таймер (StateNotifierProvider)
 - `categoriesProvider` - список категорій (FutureProvider)
 - `categoryByIdProvider` - категорія за ID (FutureProvider.family)
 
 **Auth Providers:**
+
 - `authProvider` - статус авторизації (StreamProvider)
 - `authNotifierProvider` - дії авторизації (Provider)
 
 **Profile Providers:**
+
 - `totalGamesProvider` - загальна кількість ігор (FutureProvider)
 - `bestScoreProvider` - кращий рахунок (FutureProvider)
 - `categoryStatsProvider` - статистика по категоріях (FutureProvider)
@@ -172,6 +216,7 @@ Result Screen (статистика)
 ## 🔥 Firebase Structure
 
 ### Firestore
+
 ```
 users/
   {userId}/
@@ -186,6 +231,7 @@ users/
 ```
 
 ### Authentication
+
 - Анонімна авторизація (Firebase Anonymous Auth)
 - Автоматичний вхід при запуску
 
@@ -217,24 +263,29 @@ users/
 ## 🎯 Roadmap
 
 ### Sprint 1 (MVP) ✅
+
 - Solo режим
 - 5 категорій
 - Локальні рекорди
 - Firebase Auth
 
 ### Sprint 2 (Planned)
+
 - Онлайн рекорди
 - Нікнейми
 - Аватари
 
 ### Sprint 3 (Planned)
+
 - Більше категорій
 - Кастомні категорії
 
 ### Sprint 4 (Planned)
+
 - Multiplayer режим
 
 ### Sprint 5 (Planned)
+
 - AI генерація слів
 
 ## 📄 Ліцензія

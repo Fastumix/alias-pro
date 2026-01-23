@@ -1,16 +1,18 @@
 ## Contributing to Alias Pro
 
-Thank you for your interest in contributing to Alias Pro! 
+Thank you for your interest in contributing to Alias Pro!
 
 ### Development Guidelines
 
 #### Code Style
+
 - Follow [Effective Dart](https://dart.dev/guides/language/effective-dart) guidelines
 - Use `flutter analyze` before committing
 - Run `flutter format .` to format code
 - Maintain 80% test coverage for new features
 
 #### Architecture Rules
+
 1. **Clean Architecture**: Always separate presentation, domain, and data layers
 2. **Riverpod Only**: Use Riverpod for state management (no GetX, Bloc, etc.)
 3. **GoRouter**: Use GoRouter for navigation (no Navigator 1.0)
@@ -20,11 +22,13 @@ Thank you for your interest in contributing to Alias Pro!
 #### Feature Development Process
 
 1. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 2. **Follow Feature Structure**
+
    ```
    features/
      your-feature/
@@ -41,6 +45,7 @@ Thank you for your interest in contributing to Alias Pro!
    ```
 
 3. **Write Tests First** (TDD recommended)
+
    ```bash
    flutter test test/your_feature_test.dart
    ```
@@ -62,20 +67,24 @@ Thank you for your interest in contributing to Alias Pro!
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Manual testing performed
 - [ ] All tests pass
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Self-review performed
 - [ ] Comments added for complex code
@@ -86,6 +95,7 @@ Brief description of changes
 #### Commit Message Convention
 
 Use conventional commits:
+
 ```
 feat: add multiplayer mode
 fix: resolve timer sync issue

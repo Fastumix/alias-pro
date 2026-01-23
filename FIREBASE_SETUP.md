@@ -1,6 +1,7 @@
 ## Firebase Configuration Instructions
 
 ### Prerequisites
+
 1. Create a Firebase project at https://console.firebase.google.com/
 2. Enable Firebase Authentication (Anonymous sign-in)
 3. Create a Firestore database
@@ -41,6 +42,7 @@ service cloud.firestore {
 ### Firebase Authentication
 
 Enable Anonymous sign-in:
+
 1. Go to Firebase Console → Authentication
 2. Click "Sign-in method" tab
 3. Enable "Anonymous" provider
@@ -63,6 +65,7 @@ This will generate `lib/firebase_options.dart` automatically.
 ### Verify Setup
 
 Run the app and check console logs for successful Firebase initialization:
+
 - `[FIREBASE] Initialized successfully`
 - No authentication errors
 - Firestore connection established

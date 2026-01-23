@@ -54,6 +54,7 @@ flutterfire configure
 See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions.
 
 **Quick steps:**
+
 1. Create Firebase project
 2. Enable Anonymous Authentication
 3. Create Firestore database
@@ -121,17 +122,22 @@ flutter run -d chrome
 ## 🔧 Common Issues
 
 ### Issue: "Flutter not found"
+
 **Solution**: Add Flutter to your PATH
+
 ```bash
 export PATH="$PATH:`pwd`/flutter/bin"  # Linux/Mac
 # or add to system PATH on Windows
 ```
 
 ### Issue: "Firebase not configured"
+
 **Solution**: Follow [FIREBASE_SETUP.md](FIREBASE_SETUP.md)
 
 ### Issue: "Gradle build failed" (Android)
-**Solution**: 
+
+**Solution**:
+
 ```bash
 cd android
 ./gradlew clean
@@ -142,7 +148,9 @@ flutter run
 ```
 
 ### Issue: "Pod install failed" (iOS)
+
 **Solution**:
+
 ```bash
 cd ios
 rm -rf Pods Podfile.lock

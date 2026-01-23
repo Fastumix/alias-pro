@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-01-23
 
 ### Added (MVP Sprint 1)
+
 - 🎮 Core game mechanics with 90-second timer
 - 📚 5 categories with 50 words each (250 total words)
   - 🦁 Animals
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📱 5 screens navigation flow (Home → Categories → Game → Result → Profile)
 
 ### Technical
+
 - ✅ Clean Architecture implementation
 - ✅ Riverpod state management
 - ✅ GoRouter navigation
@@ -32,12 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Firebase integration (Auth + Firestore)
 
 ### Architecture
+
 - Features-first folder structure
 - Separation of concerns (presentation/domain/data)
 - Provider-based dependency injection
 - Repository pattern for data access
 
 ### Testing
+
 - Unit tests for Game entity
 - Unit tests for Category entity
 - Unit tests for GameResult entity
@@ -46,20 +50,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned for Sprint 2
+
 - Online leaderboard
 - Custom nicknames
 - Avatar support
 - Enhanced statistics
 
 ### Planned for Sprint 3
+
 - Additional categories
 - Custom category creation
 - Word management
 
 ### Planned for Sprint 4
+
 - Multiplayer mode
 - Real-time game sessions
 
 ### Planned for Sprint 5
+
 - AI word generation
 - Smart difficulty adjustment

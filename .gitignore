@@ -82,7 +82,7 @@ lcov.info
 # Firebase
 **/google-services.json
 **/GoogleService-Info.plist
-firebase_options.dart
+# firebase_options.dart - потрібний для Netlify deployment
 
 # IDE
 .idea/
