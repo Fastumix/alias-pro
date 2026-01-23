@@ -3,7 +3,7 @@
 echo "🚀 Building Alias Pro for production..."
 
 # Build for web
-flutter build web --release --web-renderer canvaskit
+flutter build web --release
 
 echo "✅ Build complete!"
 echo "📦 Output directory: build/web"

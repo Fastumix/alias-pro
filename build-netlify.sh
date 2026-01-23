@@ -25,6 +25,6 @@ flutter config --enable-web
 
 # Build web
 echo "🔨 Building web..."
-flutter build web --release --web-renderer canvaskit
+flutter build web --release
 
 echo "✅ Build complete!"
