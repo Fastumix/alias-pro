@@ -1,9 +1,10 @@
 [build]
   publish = "build/web"
-  command = "flutter/bin/flutter build web --release --web-renderer canvaskit"
+  command = "chmod +x build-netlify.sh && ./build-netlify.sh"
 
 [build.environment]
-  FLUTTER_VERSION = "3.41.0-1.0.pre-240"
+  FLUTTER_VERSION = "3.24.0"
+  FLUTTER_CHANNEL = "stable"
 
 [[redirects]]
   from = "/*"
