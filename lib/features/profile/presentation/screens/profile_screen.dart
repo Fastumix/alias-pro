@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/utils/colors.dart';
 import '../providers/profile_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -11,6 +12,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authProvider);
+    final settings = ref.watch(settingsProvider);
     final totalGames = ref.watch(totalGamesProvider);
     final bestScore = ref.watch(bestScoreProvider);
     final categoryStats = ref.watch(categoryStatsProvider);
@@ -34,18 +36,17 @@ class ProfileScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 48,
-                      backgroundColor: AppColors.primary,
-                      child: Icon(
-                        Icons.person,
-                        size: 48,
-                        color: Colors.white,
+                      backgroundColor: AppColors.primary.withOpacity(0.2),
+                      child: Text(
+                        settings.avatarUrl ?? '😀',
+                        style: const TextStyle(fontSize: 48),
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Гравець',
+                      settings.userName,
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     const SizedBox(height: 8),

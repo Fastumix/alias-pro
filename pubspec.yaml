@@ -26,6 +26,7 @@ dependencies:
 
   # Utilities
   cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +38,15 @@ flutter:
 
   assets:
     - assets/data/categories.json
+    - assets/header-monster.svg
+    - assets/lock.svg
+    - assets/ai-star.svg
+    - assets/docs-icon.svg
+    - assets/time-icon.svg
+    - assets/flash-icon.svg
+    - assets/start_monster.svg
+    - assets/main-icon.svg
+    - assets/store-icon.svg
+    - assets/achivment-icon.svg
+    - assets/logo.svg
+    - assets/valute-icon.svg
