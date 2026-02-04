@@ -18,6 +18,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   CategoryTab _selectedTab = CategoryTab.level;
   int _selectedNavIndex = 0;
+  bool _isNavExpanded = false;
+  bool _isNavVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,54 +27,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFDFE5F3),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            _buildHeader(coins.balance),
-            
-            const SizedBox(height: 16),
-            
-            // AI Create Category Card
-            _buildAICard(),
-            
-            const SizedBox(height: 16),
-            
-            // White background for tabs and list
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          if (_isNavVisible) {
+            setState(() {
+              _isNavVisible = false;
+              _isNavExpanded = false;
+            });
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Header
+              _buildHeader(coins.balance),
+              
+              const SizedBox(height: 16),
+              
+              // AI Create Category Card
+              _buildAICard(),
+              
+              const SizedBox(height: 16),
+              
+              // White background for tabs and list
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _selectedTab == CategoryTab.category
+                        ? const Color(0xFF2D3D8B)
+                        : const Color(0xFFFFFFFF),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      // Tabs
+                      _buildTabs(),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Category List
+                      Expanded(
+                        child: _selectedTab == CategoryTab.category 
+                          ? _buildCategoryView()
+                          : _buildCategoryList(),
+                      ),
+                      
+                      // Navigation Bar
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) {
+                              return ScaleTransition(
+                                scale: animation,
+                                child: FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: _buildNavBar(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    // Tabs
-                    _buildTabs(),
-                    
-                    const SizedBox(height: 16),
-                    
-                    // Category List
-                    Expanded(
-                      child: _selectedTab == CategoryTab.category 
-                        ? _buildCategoryView()
-                        : _buildCategoryList(),
-                    ),
-                    
-                    // Bottom Navigation
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: _buildBottomNav(),
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -278,14 +308,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildTabs() {
+    final isCategoryTab = _selectedTab == CategoryTab.category;
+    
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isCategoryTab ? const Color(0xFF2D3D8B) : Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFF2D3D8B),
-          width: 3,
+          color: isCategoryTab ? Colors.white : const Color(0xFF2D3D8B),
+          width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
@@ -323,13 +355,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildTab(String text, CategoryTab tab, {IconData? icon, String? iconPath}) {
     final isSelected = _selectedTab == tab;
+    final isCategoryTab = _selectedTab == CategoryTab.category;
     
     return GestureDetector(
       onTap: () => setState(() => _selectedTab = tab),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+          color: isSelected 
+              ? (isCategoryTab ? Colors.white : const Color(0xFF2D3D8B))
+              : (isCategoryTab ? const Color(0xFF2D3D8B) : Colors.transparent),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -340,14 +375,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 iconPath,
                 width: 18,
                 height: 18,
-                colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                  isCategoryTab ? const Color(0xFF2D3D8B) : Colors.white,
+                  BlendMode.srcIn,
+                ),
               ),
               const SizedBox(width: 4),
             ] else if (icon != null && isSelected) ...[
               Icon(
                 icon,
                 size: 18,
-                color: Colors.white,
+                color: isCategoryTab ? const Color(0xFF2D3D8B) : Colors.white,
               ),
               const SizedBox(width: 4),
             ],
@@ -356,7 +394,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.black,
+                color: isSelected
+                    ? (isCategoryTab ? const Color(0xFF2D3D8B) : Colors.white)
+                    : (isCategoryTab ? Colors.white : Colors.black),
               ),
             ),
           ],
@@ -369,7 +409,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        // Category Card
+        // Orange Category Card
         Container(
           decoration: BoxDecoration(
             color: const Color(0xFFF7941E),
@@ -480,37 +520,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         
-        const SizedBox(height: 20),
-        
-        // Menu button
-        Center(
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-              elevation: 2,
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.grid_view, color: Color(0xFF2D3D8B), size: 24),
-                SizedBox(width: 12),
-                Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Color(0xFF2D3D8B),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        const SizedBox(height: 100),
         
         const SizedBox(height: 100),
       ],
@@ -682,12 +692,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
               const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(4),
-                child: ImageFiltered(
-                  imageFilter: isLocked 
-                      ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5) 
-                      : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+              ImageFiltered(
+                imageFilter: isLocked 
+                    ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5) 
+                    : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -732,8 +746,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildNavBar() {
+    if (!_isNavVisible) {
+      return Center(
+        key: const ValueKey('menu'),
+        child: GestureDetector(
+          onTap: () => setState(() => _isNavVisible = true),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.grid_view,
+                  color: const Color(0xFF2D3D8B),
+                  size: 24,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Color(0xFF2D3D8B),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    
     return Container(
+      key: const ValueKey('navbar'),
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF),
@@ -749,81 +806,154 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-            GestureDetector(
-            onTap: () => setState(() => _selectedNavIndex = 0),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedNavIndex = 0;
+                _isNavExpanded = true;
+              });
+            },
             child: Builder(builder: (context) {
               final isSelected = _selectedNavIndex == 0;
-              return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-              decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
-                borderRadius: BorderRadius.circular(99),
-              ),
-              child: Row(
-                children: [
-                SvgPicture.asset(
-                  'assets/main-icon.svg',
-                  width: 24,
-                  height: 24,
-                  color: isSelected ? Colors.white : Colors.black,
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(99),
                 ),
-                if ('Game'.isNotEmpty && isSelected) ...[
-                  const SizedBox(width: 8),
-                  const Text(
-                  'Game',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  ),
-                ],
-                ],
-              ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/main-icon.svg',
+                      width: 24,
+                      height: 24,
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      child: _isNavExpanded && isSelected
+                          ? Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Game',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ),
               );
             }),
+          ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedNavIndex = 1;
+                  _isNavExpanded = true;
+                });
+              },
+              child: Builder(builder: (context) {
+                final isSelected = _selectedNavIndex == 1;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                  decoration: BoxDecoration(
+                    color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/achivment-icon.svg',
+                        width: 24,
+                        height: 24,
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: _isNavExpanded && isSelected
+                            ? Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Achievs',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ),
             GestureDetector(
-            onTap: () => setState(() => _selectedNavIndex = 1),
-            child: Builder(builder: (context) {
-              final isSelected = _selectedNavIndex == 1;
-              return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-              decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
-                borderRadius: BorderRadius.circular(99),
-              ),
-              child: SvgPicture.asset(
-                'assets/achivment-icon.svg',
-                width: 24,
-                height: 24,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-              );
-            }),
+              onTap: () {
+                setState(() {
+                  _selectedNavIndex = 2;
+                  _isNavExpanded = true;
+                });
+              },
+              child: Builder(builder: (context) {
+                final isSelected = _selectedNavIndex == 2;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                  decoration: BoxDecoration(
+                    color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/store-icon.svg',
+                        width: 24,
+                        height: 24,
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: _isNavExpanded && isSelected
+                            ? Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Store',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ),
-            GestureDetector(
-            onTap: () => setState(() => _selectedNavIndex = 2),
-            child: Builder(builder: (context) {
-              final isSelected = _selectedNavIndex == 2;
-              return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-              decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
-                borderRadius: BorderRadius.circular(99),
-              ),
-              child: SvgPicture.asset(
-                'assets/store-icon.svg',
-                width: 24,
-                height: 24,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-              );
-            }),
-            ),
-          _buildNavItem(Icons.settings_outlined, '', 3),
-        ],
-      ),
-    );
+            _buildNavItem(Icons.settings_outlined, '', 3),
+          ],
+        ),
+      );
   }
 
   Widget _buildNavItem(IconData icon, String label, int index) {
@@ -831,7 +961,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     
     return GestureDetector(
       onTap: () {
-        setState(() => _selectedNavIndex = index);
+        setState(() {
+          _selectedNavIndex = index;
+          _isNavExpanded = true;
+        });
         
         if (index == 2) {
           // Home already
@@ -841,10 +974,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // Ideas/Tips
         }
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
+          color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
           borderRadius: BorderRadius.circular(99),
         ),
         child: Row(
@@ -854,16 +989,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               color: isSelected ? Colors.white : Colors.black,
               size: 24,
             ),
-            if (label.isNotEmpty && isSelected) ...[
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: _isNavExpanded && isSelected
+                  ? Row(
+                      children: [
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Sett',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
           ],
         ),
       ),
