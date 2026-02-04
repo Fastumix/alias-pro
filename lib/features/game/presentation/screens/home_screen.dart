@@ -24,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final coins = ref.watch(coinsProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFFDFE5F3),
       body: SafeArea(
         child: Column(
           children: [
@@ -38,19 +38,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             
             const SizedBox(height: 16),
             
-            // Tabs
-            _buildTabs(),
-            
-            const SizedBox(height: 16),
-            
-            // Category List
+            // White background for tabs and list
             Expanded(
-              child: _buildCategoryList(),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    // Tabs
+                    _buildTabs(),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Category List
+                    Expanded(
+                      child: _selectedTab == CategoryTab.category 
+                        ? _buildCategoryView()
+                        : _buildCategoryList(),
+                    ),
+                    
+                    // Bottom Navigation
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildBottomNav(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
@@ -139,11 +163,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildAICard() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      height: 145,
       decoration: BoxDecoration(color: const Color(0xFF2D3D8B), borderRadius: BorderRadius.circular(24)),
-      child: Row(
+      child: Stack(
         children: [
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -207,29 +232,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   'Create your own category',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  'Make new challenges together with AI',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 13,
+                SizedBox(
+                  width: 180,
+                  child: Text(
+                    'Make new challenges together with AI',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          // Monster Illustration
-          SizedBox(
-            width: 80,
-            height: 80,
-            child: SvgPicture.asset(
-              'assets/header-monster.svg',
-              fit: BoxFit.contain,
+          Positioned(
+            right: 8,
+            bottom: -5,
+            child: SizedBox(
+              width: 120,
+              height: 145,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(24),
+                ),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: SvgPicture.asset(
+                    'assets/header-monster.svg',
+                    fit: BoxFit.contain,
+                    width: 120,
+                    height: 145,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -267,6 +307,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: _buildTab(
               'CATEGORY',
               CategoryTab.category,
+              iconPath: 'assets/category.svg',
             ),
           ),
           Expanded(
@@ -294,19 +335,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (iconPath != null) ...[
+            if (iconPath != null && isSelected) ...[
               SvgPicture.asset(
                 iconPath,
                 width: 18,
                 height: 18,
-                color: isSelected ? Colors.white : Colors.grey[600]!,
+                colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
               const SizedBox(width: 4),
-            ] else if (icon != null) ...[
+            ] else if (icon != null && isSelected) ...[
               Icon(
                 icon,
                 size: 18,
-                color: isSelected ? Colors.white : Colors.grey[600],
+                color: Colors.white,
               ),
               const SizedBox(width: 4),
             ],
@@ -315,10 +356,180 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.grey[600],
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryView() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      children: [
+        // Category Card
+        Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFF7941E),
+            borderRadius: BorderRadius.circular(32),
+          ),
+          child: Column(
+            children: [
+              // Word count badge
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.description_outlined, size: 16, color: Color(0xFF2D3D8B)),
+                          SizedBox(width: 4),
+                          Text(
+                            '1325',
+                            style: TextStyle(
+                              color: Color(0xFF2D3D8B),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Placeholder for image
+              Container(
+                height: 200,
+                margin: const EdgeInsets.symmetric(horizontal: 40),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2D3D8B).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Image placeholder',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Word chips
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _buildWordChip('Cat'),
+                    _buildWordChip('Giraffe'),
+                    _buildWordChip('Mink'),
+                    _buildWordChip('Cow'),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Play button
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0x990D0D0D),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Animal',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Icon(Icons.play_arrow, color: Colors.white, size: 24),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        const SizedBox(height: 20),
+        
+        // Menu button
+        Center(
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+              elevation: 2,
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.grid_view, color: Color(0xFF2D3D8B), size: 24),
+                SizedBox(width: 12),
+                Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Color(0xFF2D3D8B),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        const SizedBox(height: 100),
+      ],
+    );
+  }
+
+  Widget _buildWordChip(String word) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        word,
+        style: const TextStyle(
+          color: Color(0xFF2D3D8B),
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -523,13 +734,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildBottomNav() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -541,10 +754,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Builder(builder: (context) {
               final isSelected = _selectedNavIndex == 0;
               return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
               decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(24),
+                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
+                borderRadius: BorderRadius.circular(99),
               ),
               child: Row(
                 children: [
@@ -552,7 +765,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   'assets/main-icon.svg',
                   width: 24,
                   height: 24,
-                  color: isSelected ? Colors.white : Colors.grey[600]!,
+                  color: isSelected ? Colors.white : Colors.black,
                 ),
                 if ('Game'.isNotEmpty && isSelected) ...[
                   const SizedBox(width: 8),
@@ -574,16 +787,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Builder(builder: (context) {
               final isSelected = _selectedNavIndex == 1;
               return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
               decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(24),
+                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
+                borderRadius: BorderRadius.circular(99),
               ),
               child: SvgPicture.asset(
                 'assets/achivment-icon.svg',
                 width: 24,
                 height: 24,
-                color: isSelected ? Colors.white : Colors.grey[600]!,
+                color: isSelected ? Colors.white : Colors.black,
               ),
               );
             }),
@@ -593,16 +806,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Builder(builder: (context) {
               final isSelected = _selectedNavIndex == 2;
               return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
               decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(24),
+                color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
+                borderRadius: BorderRadius.circular(99),
               ),
               child: SvgPicture.asset(
                 'assets/store-icon.svg',
                 width: 24,
                 height: 24,
-                color: isSelected ? Colors.white : Colors.grey[600]!,
+                color: isSelected ? Colors.white : Colors.black,
               ),
               );
             }),
@@ -629,16 +842,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
+          color: isSelected ? Color(0xFF2D3D8B) : Colors.transparent,
+          borderRadius: BorderRadius.circular(99),
         ),
         child: Row(
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.white : Colors.grey[600],
+              color: isSelected ? Colors.white : Colors.black,
               size: 24,
             ),
             if (label.isNotEmpty && isSelected) ...[
