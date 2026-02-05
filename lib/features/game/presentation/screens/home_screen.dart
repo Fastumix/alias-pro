@@ -38,66 +38,73 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
         },
         child: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              // Header
-              _buildHeader(coins.balance),
-              
-              const SizedBox(height: 16),
-              
-              // AI Create Category Card
-              _buildAICard(),
-              
-              const SizedBox(height: 16),
-              
-              // White background for tabs and list
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: _selectedTab == CategoryTab.category
-                        ? const Color(0xFF2D3D8B)
-                        : const Color(0xFFFFFFFF),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      // Tabs
-                      _buildTabs(),
-                      
-                      const SizedBox(height: 16),
-                      
-                      // Category List
-                      Expanded(
-                        child: _selectedTab == CategoryTab.category 
-                          ? _buildCategoryView()
-                          : _buildCategoryList(),
-                      ),
-                      
-                      // Navigation Bar
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            transitionBuilder: (child, animation) {
-                              return ScaleTransition(
-                                scale: animation,
-                                child: FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: _buildNavBar(),
-                          ),
+              Column(
+                children: [
+                  // Header
+                  _buildHeader(coins.balance),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // AI Create Category Card
+                  _buildAICard(),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // White background for tabs and list
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _selectedTab == CategoryTab.category
+                            ? const Color(0xFF2D3D8B)
+                            : const Color(0xFFFFFFFF),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
                         ),
                       ),
-                    ],
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16),
+                          // Tabs
+                          _buildTabs(),
+                          
+                          const SizedBox(height: 16),
+                          
+                          // Category List
+                          Expanded(
+                            child: _selectedTab == CategoryTab.category 
+                              ? _buildCategoryView()
+                              : _buildCategoryList(),
+                          ),
+                          
+                          const SizedBox(height: 100), // Space for nav bar
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              
+              // Fixed Navigation Bar at bottom
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 16,
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return ScaleTransition(
+                        scale: animation,
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: _buildNavBar(),
                   ),
                 ),
               ),
@@ -138,6 +145,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF1C2659),
+                      fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
@@ -165,6 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Gilroy',
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -224,6 +233,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               color: Color(0xFF2D3D8B),
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Gilroy',
                             ),
                           ),
                         ],
@@ -250,6 +260,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Gilroy',
                             ),
                           ),
                         ],
@@ -263,7 +274,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gilroy',
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -274,6 +286,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
@@ -393,10 +407,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               text,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
                 color: isSelected
                     ? (isCategoryTab ? const Color(0xFF2D3D8B) : Colors.white)
                     : (isCategoryTab ? Colors.white : Colors.black),
+                fontFamily: 'Gilroy',
               ),
             ),
           ],
@@ -406,140 +421,149 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCategoryView() {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        // Orange Category Card
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF7941E),
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Column(
-            children: [
-              // Word count badge
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.description_outlined, size: 16, color: Color(0xFF2D3D8B)),
-                          SizedBox(width: 4),
-                          Text(
-                            '1325',
-                            style: TextStyle(
-                              color: Color(0xFF2D3D8B),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: (MediaQuery.of(context).size.width - 32) * 0.85,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7941E),
+                borderRadius: BorderRadius.circular(32),
               ),
-              
-              // Placeholder for image
-              Container(
-                height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 40),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D8B).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Image placeholder',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Word chips
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _buildWordChip('Cat'),
-                    _buildWordChip('Giraffe'),
-                    _buildWordChip('Mink'),
-                    _buildWordChip('Cow'),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Play button
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0x990D0D0D),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                children: [
+                  // Word count badge
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          'Animal',
-                          style: TextStyle(
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
                             color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/docs-icon.svg',
+                                width: 16,
+                                height: 16,
+                                color: const Color(0xFF2D3D8B),
+                              ),
+                              const SizedBox(width: 4),
+                              const Text(
+                                '1325',
+                                style: TextStyle(
+                                  color: Color(0xFF2D3D8B),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Gilroy',
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(width: 12),
-                        Icon(Icons.play_arrow, color: Colors.white, size: 24),
                       ],
                     ),
                   ),
-                ),
+                  
+                  // Placeholder for image
+                  Container(
+                    height: 170,
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2D3D8B).withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Image placeholder',
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Gilroy'),
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 12),
+                  
+                  // Word chips
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Wrap(
+                      spacing: 0,
+                      runSpacing: 0,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        _buildWordChip('Cat'),
+                        _buildWordChip('Giraffe'),
+                        _buildWordChip('Mink'),
+                        _buildWordChip('Cow'),
+                      ],
+                    ),
+                  ),
+                  
+                  const Spacer(),
+                  
+                  // Play button
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0x990D0D0D),
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Animal',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Gilroy',
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Icon(Icons.play_arrow, color: Colors.white, size: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-        
-        const SizedBox(height: 100),
-        
-        const SizedBox(height: 100),
-      ],
+        );
+      },
     );
   }
 
   Widget _buildWordChip(String word) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.8),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         word,
         style: const TextStyle(
-          color: Color(0xFF2D3D8B),
+          color: Color(0xFF0D0D0D),
           fontSize: 14,
           fontWeight: FontWeight.w600,
+          fontFamily: 'Gilroy',
         ),
       ),
     );
@@ -631,7 +655,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gilroy',
                   ),
                 ),
               ),
@@ -657,6 +682,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Gilroy',
                         ),
                       ),
                     ],
@@ -708,15 +734,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         'assets/docs-icon.svg',
                         width: 16,
                         height: 16,
-                        color: textColor,
+                        color: const Color(0xFF2D3D8B),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         wordCount.toString(),
-                        style: TextStyle(
-                          color: textColor,
+                        style: const TextStyle(
+                          color: Color(0xFF2D3D8B),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Gilroy',
                         ),
                       ),
                     ],
@@ -737,6 +764,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: TextStyle(
                   color: textColor,
                   fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Gilroy',
                 ),
               ),
             ),
@@ -748,42 +777,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildNavBar() {
     if (!_isNavVisible) {
-      return Center(
+      return GestureDetector(
         key: const ValueKey('menu'),
-        child: GestureDetector(
-          onTap: () => setState(() => _isNavVisible = true),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
+        onTap: () => setState(() => _isNavVisible = true),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: const Color(0xCCFFFFFF),
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.grid_view,
+                color: const Color(0xFF0D0D0D),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Menu',
+                style: TextStyle(
+                  color: Color(0xFF0D0D0D),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Gilroy',
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.grid_view,
-                  color: const Color(0xFF2D3D8B),
-                  size: 24,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Color(0xFF2D3D8B),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
@@ -842,7 +870,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   'Game',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Gilroy',
                                   ),
                                 ),
                               ],
@@ -890,7 +919,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     'Achievs',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Gilroy',
                                     ),
                                   ),
                                 ],
@@ -938,7 +968,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     'Store',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Gilroy',
                                     ),
                                   ),
                                 ],
@@ -1000,7 +1031,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           'Sett',
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Gilroy',
                           ),
                         ),
                       ],
