@@ -71,6 +71,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
     redirect: (context, state) async {
+      // Only redirect if not on start screen
+      if (state.matchedLocation == '/') {
+        return null;
+      }
+      
       final authState = ref.read(authProvider);
       
       // Initialize anonymous auth if not authenticated

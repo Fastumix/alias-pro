@@ -51,6 +51,9 @@ flutter:
     - assets/logo.svg
     - assets/valute-icon.svg
     - assets/category.svg
+    - assets/background-frame.svg
+    - assets/play-icon.svg
+    - assets/logo-start.svg
 
   fonts:
     - family: Gilroy

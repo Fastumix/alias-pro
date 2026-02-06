@@ -20,6 +20,19 @@ class StartScreen extends StatelessWidget {
             Positioned(
               left: 0,
               right: 0,
+              top: 0,
+              bottom: 0,
+              child: Opacity(
+                opacity: 0.2,
+                child: SvgPicture.asset(
+                  'assets/background-frame.svg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
               bottom: 20 + verticalShift,
               child: Center(
                 child: SizedBox(
@@ -38,15 +51,16 @@ class StartScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Get Started',
                           style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
-                        SizedBox(width: 12),
-                        Icon(
-                          Icons.play_arrow,
-                          color: Colors.white,
+                        const SizedBox(width: 20),
+                        SvgPicture.asset(
+                          'assets/play-icon.svg',
+                          width: 14,
+                          height: 14,
                         ),
                       ],
                     ),
@@ -55,6 +69,18 @@ class StartScreen extends StatelessWidget {
               ),
             ),
 
+            Positioned(
+              left: 0,
+              right: 0,
+              top: MediaQuery.of(context).size.height * 0.05,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/logo-start.svg',
+                  width: 121,
+                  height: 43,
+                ),
+              ),
+            ),
             Positioned(
               left: 0,
               right: 0,

@@ -522,10 +522,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             borderRadius: BorderRadius.circular(32),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               'Animal',
                               style: TextStyle(
                                 color: Colors.white,
@@ -534,8 +534,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 fontFamily: 'Gilroy',
                               ),
                             ),
-                            SizedBox(width: 12),
-                            Icon(Icons.play_arrow, color: Colors.white, size: 24),
+                            const SizedBox(width: 20),
+                            SvgPicture.asset(
+                              'assets/play-icon.svg',
+                              width: 14,
+                              height: 14,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ],
                         ),
                       ),
