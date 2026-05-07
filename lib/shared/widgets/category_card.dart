@@ -30,7 +30,7 @@ class CategoryCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                color.withOpacity(0.8),
+                color.withValues(alpha: 0.8),
                 color,
               ],
             ),

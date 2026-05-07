@@ -24,6 +24,10 @@ dependencies:
   # Local Storage
   shared_preferences: ^2.2.2
 
+  # Networking
+  dio: ^5.4.0
+  flutter_secure_storage: ^9.2.2
+
   # Utilities
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.9

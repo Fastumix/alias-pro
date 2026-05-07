@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class StartScreen extends StatelessWidget {
-  const StartScreen({Key? key}) : super(key: key);
+  const StartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

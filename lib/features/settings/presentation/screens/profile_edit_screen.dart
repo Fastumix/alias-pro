@@ -78,7 +78,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           Center(
             child: CircleAvatar(
               radius: 60,
-              backgroundColor: AppTheme.primaryColor.withOpacity(0.2),
+              backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.2),
               child: Text(
                 _selectedAvatar ?? settings.avatarUrl ?? '😀',
                 style: const TextStyle(fontSize: 64),
@@ -116,7 +116,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected 
-                        ? AppTheme.primaryColor.withOpacity(0.2)
+                        ? AppTheme.primaryColor.withValues(alpha: 0.2)
                         : Colors.grey[200],
                     borderRadius: BorderRadius.circular(12),
                     border: isSelected

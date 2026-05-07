@@ -67,7 +67,7 @@ class HowToPlayScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Card(
-            color: AppTheme.primaryColor.withOpacity(0.1),
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

@@ -96,8 +96,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: timeRemaining <= 10
-                    ? AppColors.error.withOpacity(0.1)
-                    : AppColors.info.withOpacity(0.1),
+                    ? AppColors.error.withValues(alpha: 0.1)
+                    : AppColors.info.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -114,7 +114,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.success.withOpacity(0.1),
+                color: AppColors.success.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -140,10 +140,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               child: Container(
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -274,10 +274,10 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -296,7 +296,7 @@ class _StatChip extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: color.withOpacity(0.8),
+              color: color.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
             ),
           ),

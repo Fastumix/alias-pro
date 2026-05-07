@@ -25,6 +25,7 @@ flutter config --enable-web
 
 # Build web
 echo "🔨 Building web..."
-flutter build web --release
+flutter build web --release \
+  ${API_BASE_URL:+--dart-define=API_BASE_URL=$API_BASE_URL}
 
 echo "✅ Build complete!"

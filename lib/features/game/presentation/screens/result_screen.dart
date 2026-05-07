@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/utils/colors.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import '../providers/game_provider.dart';
+import '../providers/game_settings_provider.dart';
+import '../providers/teams_provider.dart';
 import '../../../profile/data/datasources/local_storage_datasource.dart';
+import '../../data/datasources/game_results_remote_datasource.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
   const ResultScreen({super.key});
@@ -26,11 +31,26 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 
   Future<void> _saveResult() async {
     if (_isSaved) return;
-    
+
     final gameResult = ref.read(gameProvider.notifier).getGameResult();
-    
+
     if (gameResult != null) {
+      // 1. Save locally (always).
       await ref.read(localStorageProvider).saveGameResult(gameResult);
+
+      // 2. Send to backend (best-effort).
+      final settings = ref.read(gameSettingsProvider);
+      final teams = ref.read(teamsProvider);
+      final teamName = teams.isNotEmpty ? teams.first : 'Team';
+      unawaited(
+        ref.read(gameResultsRemoteDatasourceProvider).saveResult(
+          result: gameResult,
+          teamName: teamName,
+          round: 1,
+          timeRound: settings.timeRound,
+        ),
+      );
+
       setState(() {
         _isSaved = true;
       });
@@ -105,10 +125,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               Container(
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1),
+                  color: AppColors.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: AppColors.success.withOpacity(0.3),
+                    color: AppColors.success.withValues(alpha: 0.3),
                     width: 2,
                   ),
                 ),
@@ -206,10 +226,10 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -234,7 +254,7 @@ class _StatCard extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 14,
-              color: color.withOpacity(0.8),
+              color: color.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
             ),
           ),

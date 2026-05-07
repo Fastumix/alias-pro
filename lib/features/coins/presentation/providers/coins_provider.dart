@@ -2,15 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../domain/entities/user_coins.dart';
+import '../../data/datasources/coins_remote_datasource.dart';
 
 final coinsProvider = StateNotifierProvider<CoinsNotifier, UserCoins>((ref) {
-  return CoinsNotifier();
+  return CoinsNotifier(ref.read(coinsRemoteDatasourceProvider));
 });
 
 class CoinsNotifier extends StateNotifier<UserCoins> {
   static const String _coinsKey = 'user_coins';
+  final CoinsRemoteDatasource _remote;
 
-  CoinsNotifier() : super(UserCoins(balance: 0, lastUpdated: DateTime.now())) {
+  CoinsNotifier(this._remote)
+      : super(UserCoins(balance: 0, lastUpdated: DateTime.now())) {
     _loadCoins();
   }
 
@@ -18,16 +21,21 @@ class CoinsNotifier extends StateNotifier<UserCoins> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = prefs.getString(_coinsKey);
-      
+
       if (jsonString != null) {
         final json = jsonDecode(jsonString) as Map<String, dynamic>;
         state = UserCoins.fromJson(json);
       } else {
-        // Початковий баланс для нових користувачів
         await addCoins(100);
       }
+
+      // Best-effort sync from backend — backend balance wins if available.
+      final serverBalance = await _remote.fetchBalance();
+      if (serverBalance != null && serverBalance != state.balance) {
+        await setBalance(serverBalance);
+      }
     } catch (e) {
-      print('Error loading coins: $e');
+      // ignore: avoid_print
     }
   }
 
@@ -37,7 +45,7 @@ class CoinsNotifier extends StateNotifier<UserCoins> {
       final jsonString = jsonEncode(state.toJson());
       await prefs.setString(_coinsKey, jsonString);
     } catch (e) {
-      print('Error saving coins: $e');
+      // ignore: avoid_print
     }
   }
 

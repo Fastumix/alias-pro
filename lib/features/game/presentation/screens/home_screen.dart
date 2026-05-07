@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../shared/theme/app_theme.dart';
 import '../../../coins/presentation/providers/coins_provider.dart';
 
 enum CategoryTab { level, category, ownLists }
@@ -123,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           // Logo
           Builder(builder: (context) {
-            final double proVerticalPadding = ((Theme.of(context).textTheme.displayMedium?.fontSize ?? 32) * 0.09).clamp(3.0, 8.0) as double;
+            final double proVerticalPadding = ((Theme.of(context).textTheme.displayMedium?.fontSize ?? 32) * 0.09).clamp(3.0, 8.0);
             return Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -139,19 +138,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     color: const Color(0xFFA3AFF3),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Text(
+                  child: const Text(
                     'pro',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1C2659),
+                      color: Color(0xFF1C2659),
                       fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
               ],
             );
-          }),
+          },),
           
           // Coins
           Container(
@@ -161,7 +160,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                 ),
               ],
@@ -188,7 +187,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     'assets/valute-icon.svg',
                     width: 16,
                     height: 16,
-                    color: Colors.white,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ],
@@ -284,7 +286,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Text(
                     'Make new challenges together with AI',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
                       fontFamily: 'Gilroy',
@@ -335,7 +337,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
           ),
         ],
@@ -453,7 +455,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 'assets/docs-icon.svg',
                                 width: 16,
                                 height: 16,
-                                color: const Color(0xFF2D3D8B),
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xFF2D3D8B),
+                                  BlendMode.srcIn,
+                                ),
                               ),
                               const SizedBox(width: 4),
                               const Text(
@@ -477,7 +482,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     height: 170,
                     margin: const EdgeInsets.symmetric(horizontal: 40),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2D3D8B).withOpacity(0.2),
+                      color: const Color(0xFF2D3D8B).withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Center(
@@ -562,7 +567,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -587,6 +592,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           1325,
           const Color(0xFFB8F4C6),
           const Color(0xFF2E7D32),
+          levelId: 'beginner',
           isUnlocked: true,
         ),
         const SizedBox(height: 12),
@@ -596,6 +602,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           643,
           const Color(0xFFFFF9C4),
           const Color(0xFFF57F17),
+          levelId: 'player',
           isUnlocked: true,
         ),
         const SizedBox(height: 12),
@@ -605,6 +612,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           1354,
           const Color(0xFFBBDEFB),
           const Color(0xFF1976D2),
+          levelId: 'pro',
           isDemo: true,
           isUnlocked: true,
         ),
@@ -637,11 +645,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     int wordCount,
     Color bgColor,
     Color textColor, {
+    String? levelId,
     bool isLocked = false,
     bool isDemo = false,
     bool isUnlocked = false,
   }) {
-    return Container(
+    return GestureDetector(
+      onTap: isLocked || levelId == null
+          ? null
+          : () => context.push('/team/$levelId'),
+      child: Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: bgColor,
@@ -673,7 +686,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: textColor.withOpacity(0.3),
+                    color: textColor.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -742,7 +755,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         'assets/docs-icon.svg',
                         width: 16,
                         height: 16,
-                        color: const Color(0xFF2D3D8B),
+                        colorFilter: const ColorFilter.mode(
+                          Color(0xFF2D3D8B),
+                          BlendMode.srcIn,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -780,6 +796,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -795,22 +812,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Row(
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.grid_view,
-                color: const Color(0xFF0D0D0D),
+                color: Color(0xFF0D0D0D),
                 size: 24,
               ),
-              const SizedBox(width: 8),
-              const Text(
+              SizedBox(width: 8),
+              Text(
                 'Menu',
                 style: TextStyle(
                   color: Color(0xFF0D0D0D),
@@ -833,7 +850,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -865,16 +882,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       'assets/main-icon.svg',
                       width: 24,
                       height: 24,
-                      color: isSelected ? Colors.white : Colors.black,
+                      colorFilter: ColorFilter.mode(
+                        isSelected ? Colors.white : Colors.black,
+                        BlendMode.srcIn,
+                      ),
                     ),
                     AnimatedSize(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       child: _isNavExpanded && isSelected
-                          ? Row(
+                          ? const Row(
                               children: [
-                                const SizedBox(width: 8),
-                                const Text(
+                                SizedBox(width: 8),
+                                Text(
                                   'Game',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -889,7 +909,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ],
                 ),
               );
-            }),
+            },),
           ),
             GestureDetector(
               onTap: () {
@@ -914,16 +934,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         'assets/achivment-icon.svg',
                         width: 24,
                         height: 24,
-                        color: isSelected ? Colors.white : Colors.black,
+                        colorFilter: ColorFilter.mode(
+                          isSelected ? Colors.white : Colors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       AnimatedSize(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         child: _isNavExpanded && isSelected
-                            ? Row(
+                            ? const Row(
                                 children: [
-                                  const SizedBox(width: 8),
-                                  const Text(
+                                  SizedBox(width: 8),
+                                  Text(
                                     'Achievs',
                                     style: TextStyle(
                                       color: Colors.white,
@@ -938,7 +961,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 );
-              }),
+              },),
             ),
             GestureDetector(
               onTap: () {
@@ -963,16 +986,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         'assets/store-icon.svg',
                         width: 24,
                         height: 24,
-                        color: isSelected ? Colors.white : Colors.black,
+                        colorFilter: ColorFilter.mode(
+                          isSelected ? Colors.white : Colors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       AnimatedSize(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         child: _isNavExpanded && isSelected
-                            ? Row(
+                            ? const Row(
                                 children: [
-                                  const SizedBox(width: 8),
-                                  const Text(
+                                  SizedBox(width: 8),
+                                  Text(
                                     'Store',
                                     style: TextStyle(
                                       color: Colors.white,
@@ -987,7 +1013,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 );
-              }),
+              },),
             ),
             _buildNavItem(Icons.settings_outlined, '', 3),
           ],
@@ -1032,10 +1058,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               child: _isNavExpanded && isSelected
-                  ? Row(
+                  ? const Row(
                       children: [
-                        const SizedBox(width: 8),
-                        const Text(
+                        SizedBox(width: 8),
+                        Text(
                           'Sett',
                           style: TextStyle(
                             color: Colors.white,

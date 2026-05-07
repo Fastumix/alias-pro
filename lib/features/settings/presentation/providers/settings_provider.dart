@@ -24,7 +24,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         state = AppSettings.fromJson(json);
       }
     } catch (e) {
-      print('Error loading settings: $e');
+      // ignore: avoid_print
     }
   }
 
@@ -34,7 +34,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
       final jsonString = jsonEncode(state.toJson());
       await prefs.setString(_settingsKey, jsonString);
     } catch (e) {
-      print('Error saving settings: $e');
+      // ignore: avoid_print
     }
   }
 

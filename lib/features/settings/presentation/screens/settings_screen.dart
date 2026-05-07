@@ -180,7 +180,7 @@ class _SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: AppTheme.primaryColor.withOpacity(0.1),
+        backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.1),
         child: Icon(icon, color: AppTheme.primaryColor, size: 20),
       ),
       title: Text(

@@ -5,6 +5,9 @@ import '../features/game/presentation/screens/start_screen.dart';
 import '../features/game/presentation/screens/categories_screen.dart';
 import '../features/game/presentation/screens/game_screen.dart';
 import '../features/game/presentation/screens/result_screen.dart';
+import '../features/game/presentation/screens/team_screen.dart';
+import '../features/game/presentation/screens/game_settings_screen.dart';
+import '../features/game/presentation/screens/game_start_screen.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/settings/presentation/screens/profile_edit_screen.dart';
@@ -30,6 +33,38 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/categories',
         name: 'categories',
         builder: (context, state) => const CategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/team/:levelId',
+        name: 'team',
+        builder: (context, state) {
+          final levelId = state.pathParameters['levelId']!;
+          return TeamScreen(levelId: levelId);
+        },
+      ),
+      GoRoute(
+        path: '/game-settings/:levelId',
+        name: 'game-settings',
+        builder: (context, state) {
+          final levelId = state.pathParameters['levelId']!;
+          return GameSettingsScreen(levelId: levelId);
+        },
+      ),
+      GoRoute(
+        path: '/game-start/:categoryId/:teamName/:round/:teamScore',
+        name: 'game-start',
+        builder: (context, state) {
+          final categoryId = state.pathParameters['categoryId']!;
+          final teamName = state.pathParameters['teamName']!;
+          final round = int.tryParse(state.pathParameters['round']!) ?? 1;
+          final teamScore = int.tryParse(state.pathParameters['teamScore']!) ?? 0;
+          return GameStartScreen(
+            teamName: teamName,
+            round: round,
+            teamScore: teamScore,
+            categoryId: categoryId,
+          );
+        },
       ),
       GoRoute(
         path: '/game/:categoryId',
