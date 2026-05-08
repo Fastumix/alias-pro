@@ -68,7 +68,6 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             Positioned(
               left: 0,
               right: 0,

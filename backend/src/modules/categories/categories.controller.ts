@@ -1,12 +1,12 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CategoriesService } from './categories.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import { CategoriesService } from "./categories.service";
 
-@ApiTags('categories')
+@ApiTags("categories")
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller({ path: 'categories', version: '1' })
+@Controller({ path: "categories", version: "1" })
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -15,17 +15,14 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @Get(':slug')
-  findOne(@Param('slug') slug: string) {
+  @Get(":slug")
+  findOne(@Param("slug") slug: string) {
     return this.categoriesService.findOne(slug);
   }
 
-  @ApiQuery({ name: 'limit', required: false, type: Number })
-  @Get(':slug/words')
-  getWords(
-    @Param('slug') slug: string,
-    @Query('limit') limit?: number,
-  ) {
+  @ApiQuery({ name: "limit", required: false, type: Number })
+  @Get(":slug/words")
+  getWords(@Param("slug") slug: string, @Query("limit") limit?: number) {
     return this.categoriesService.getWords(slug, limit);
   }
 }

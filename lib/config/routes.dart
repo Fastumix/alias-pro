@@ -1,19 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../features/game/presentation/screens/home_screen.dart';
-import '../features/game/presentation/screens/start_screen.dart';
+
+import '../features/auth/presentation/providers/auth_provider.dart';
 import '../features/game/presentation/screens/categories_screen.dart';
 import '../features/game/presentation/screens/game_screen.dart';
-import '../features/game/presentation/screens/result_screen.dart';
-import '../features/game/presentation/screens/team_screen.dart';
 import '../features/game/presentation/screens/game_settings_screen.dart';
 import '../features/game/presentation/screens/game_start_screen.dart';
+import '../features/game/presentation/screens/home_screen.dart';
+import '../features/game/presentation/screens/result_screen.dart';
+import '../features/game/presentation/screens/start_screen.dart';
+import '../features/game/presentation/screens/team_screen.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
-import '../features/settings/presentation/screens/settings_screen.dart';
-import '../features/settings/presentation/screens/profile_edit_screen.dart';
-import '../features/settings/presentation/screens/language_screen.dart';
 import '../features/settings/presentation/screens/how_to_play_screen.dart';
-import '../features/auth/presentation/providers/auth_provider.dart';
+import '../features/settings/presentation/screens/language_screen.dart';
+import '../features/settings/presentation/screens/profile_edit_screen.dart';
+import '../features/settings/presentation/screens/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -57,7 +58,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           final categoryId = state.pathParameters['categoryId']!;
           final teamName = state.pathParameters['teamName']!;
           final round = int.tryParse(state.pathParameters['round']!) ?? 1;
-          final teamScore = int.tryParse(state.pathParameters['teamScore']!) ?? 0;
+          final teamScore =
+              int.tryParse(state.pathParameters['teamScore']!) ?? 0;
           return GameStartScreen(
             teamName: teamName,
             round: round,
@@ -110,14 +112,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (state.matchedLocation == '/') {
         return null;
       }
-      
+
       final authState = ref.read(authProvider);
-      
+
       // Initialize anonymous auth if not authenticated
       if (authState.value == null) {
         await ref.read(authNotifierProvider).signInAnonymously();
       }
-      
+
       return null;
     },
   );

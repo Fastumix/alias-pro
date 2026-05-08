@@ -15,8 +15,7 @@ class CoinsRemoteDatasource {
   /// Returns the server-side coin balance, or null if unavailable.
   Future<int?> fetchBalance() async {
     try {
-      final response =
-          await _dio.get<dynamic>(ApiConstants.coinsBalance);
+      final response = await _dio.get<dynamic>(ApiConstants.coinsBalance);
       final data = response.data;
       if (data is int) return data;
       if (data is Map) return data['balance'] as int?;

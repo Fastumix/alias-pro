@@ -1,7 +1,7 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe, VersioningType } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,19 +20,19 @@ async function bootstrap() {
 
   // CORS — allow Flutter app (adjust origins in production)
   app.enableCors({
-    origin: process.env.CORS_ORIGINS?.split(',') ?? '*',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    origin: process.env.CORS_ORIGINS?.split(",") ?? "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   });
 
   // Swagger UI at /api
   const config = new DocumentBuilder()
-    .setTitle('Alias Pro API')
-    .setDescription('REST API for Alias Pro mobile game')
-    .setVersion('1.0')
+    .setTitle("Alias Pro API")
+    .setDescription("REST API for Alias Pro mobile game")
+    .setVersion("1.0")
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup("api", app, document);
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);

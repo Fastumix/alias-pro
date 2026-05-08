@@ -1,12 +1,15 @@
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { CoinTransaction, CoinTransactionType } from './coin-transaction.entity';
-import { User } from '../users/user.entity';
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
+import { User } from "../users/user.entity";
+import {
+    CoinTransaction,
+    CoinTransactionType,
+} from "./coin-transaction.entity";
 
 @Injectable()
 export class CoinsService {
@@ -20,14 +23,14 @@ export class CoinsService {
 
   async getBalance(userId: string): Promise<number> {
     const user = await this.usersRepo.findOneBy({ id: userId });
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException("User not found");
     return user.coinBalance;
   }
 
-  async credit(userId: string, amount: number, reason = ''): Promise<void> {
-    if (amount <= 0) throw new BadRequestException('Amount must be positive');
+  async credit(userId: string, amount: number, reason = ""): Promise<void> {
+    if (amount <= 0) throw new BadRequestException("Amount must be positive");
     await this.dataSource.transaction(async (em) => {
-      await em.increment(User, { id: userId }, 'coinBalance', amount);
+      await em.increment(User, { id: userId }, "coinBalance", amount);
       await em.save(CoinTransaction, {
         userId,
         amount,
@@ -37,13 +40,13 @@ export class CoinsService {
     });
   }
 
-  async debit(userId: string, amount: number, reason = ''): Promise<void> {
-    if (amount <= 0) throw new BadRequestException('Amount must be positive');
+  async debit(userId: string, amount: number, reason = ""): Promise<void> {
+    if (amount <= 0) throw new BadRequestException("Amount must be positive");
     await this.dataSource.transaction(async (em) => {
       const user = await em.findOneByOrFail(User, { id: userId });
       if (user.coinBalance < amount)
-        throw new BadRequestException('Insufficient coins');
-      await em.decrement(User, { id: userId }, 'coinBalance', amount);
+        throw new BadRequestException("Insufficient coins");
+      await em.decrement(User, { id: userId }, "coinBalance", amount);
       await em.save(CoinTransaction, {
         userId,
         amount,
@@ -56,7 +59,7 @@ export class CoinsService {
   getHistory(userId: string): Promise<CoinTransaction[]> {
     return this.txRepo.find({
       where: { userId },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: "DESC" },
       take: 100,
     });
   }

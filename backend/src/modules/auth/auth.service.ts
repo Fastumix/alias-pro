@@ -1,14 +1,14 @@
 import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import { JwtPayload } from './strategies/jwt.strategy';
+    BadRequestException,
+    Injectable,
+    UnauthorizedException,
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { UsersService } from "../users/users.service";
+import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "./dto/register.dto";
+import { JwtPayload } from "./strategies/jwt.strategy";
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     const existing = await this.usersService.findByEmail(dto.email);
-    if (existing) throw new BadRequestException('Email already in use');
+    if (existing) throw new BadRequestException("Email already in use");
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
     const user = await this.usersService.create({
@@ -34,10 +34,10 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.usersService.findByEmail(dto.email);
     if (!user || !user.passwordHash)
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException("Invalid credentials");
 
     const valid = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!valid) throw new UnauthorizedException('Invalid credentials');
+    if (!valid) throw new UnauthorizedException("Invalid credentials");
 
     return this.issueToken(user.id, user.email);
   }
@@ -49,7 +49,7 @@ export class AuthService {
       user = await this.usersService.create({
         firebaseUid,
         email: email ?? undefined,
-        displayName: email?.split('@')[0] ?? 'Player',
+        displayName: email?.split("@")[0] ?? "Player",
         isAnonymous: !email,
       });
     }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../shared/utils/colors.dart';
-import '../providers/profile_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../settings/presentation/providers/settings_provider.dart';
+import '../providers/profile_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -62,17 +63,17 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Overall Statistics
             Text(
               'Загальна статистика',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             Row(
               children: [
                 Expanded(
@@ -102,17 +103,17 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Category Statistics
             Text(
               'Статистика по категоріях',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             categoryStats.when(
               data: (stats) {
                 if (stats.isEmpty) {
@@ -131,7 +132,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   );
                 }
-                
+
                 return Column(
                   children: stats.entries.map((entry) {
                     return Card(

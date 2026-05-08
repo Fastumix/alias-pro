@@ -1,8 +1,8 @@
-import { IsString, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class FirebaseAuthDto {
-  @ApiProperty({ description: 'Firebase ID token from client' })
+  @ApiProperty({ description: "Firebase ID token from client" })
   @IsString()
   @IsNotEmpty()
   idToken: string;

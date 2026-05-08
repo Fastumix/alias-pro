@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../shared/utils/colors.dart';
+
+import 'package:flutter_svg/flutter_svg.dart';
 import '../providers/game_provider.dart';
+import '../providers/game_settings_provider.dart';
+import '../providers/teams_provider.dart';
 import '../providers/timer_provider.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
@@ -30,14 +33,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   Future<void> _initializeGame() async {
     if (_isInitialized) return;
-    
+
     try {
       await ref.read(gameProvider.notifier).startGame(widget.categoryId);
-      
+
       ref.read(timerProvider.notifier).startTimer(
-        onComplete: _handleGameEnd,
-      );
-      
+            onComplete: _handleGameEnd,
+          );
+
       setState(() {
         _isInitialized = true;
       });
@@ -58,249 +61,281 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
   }
 
-  void _handleGuess() {
-    ref.read(gameProvider.notifier).guessWord();
-  }
-
-  void _handleSkip() {
-    ref.read(gameProvider.notifier).skipWord();
-  }
-
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final secs = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
-  }
+  void _handleGuess() => ref.read(gameProvider.notifier).guessWord();
+  void _handleSkip() => ref.read(gameProvider.notifier).skipWord();
 
   @override
   Widget build(BuildContext context) {
     final game = ref.watch(gameProvider);
     final timeRemaining = ref.watch(timerProvider);
+    final teams = ref.watch(teamsProvider);
+    final settings = ref.watch(gameSettingsProvider);
+    final teamName = teams.isNotEmpty ? teams.first : 'Team';
 
     if (game == null || !_isInitialized) {
       return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+        backgroundColor: Color(0xFF2D3D8B),
+        body: Center(child: CircularProgressIndicator(color: Colors.white)),
       );
     }
 
+    final progress = (timeRemaining / settings.timeRound).clamp(0.0, 1.0);
+
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Timer
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: timeRemaining <= 10
-                    ? AppColors.error.withValues(alpha: 0.1)
-                    : AppColors.info.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                _formatTime(timeRemaining),
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: timeRemaining <= 10 ? AppColors.error : AppColors.info,
-                ),
-              ),
-            ),
-            
-            // Score
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.success.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                'Score: ${game.score}',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Spacer(),
-            
-            // Current Word Display
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Container(
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    width: 2,
+      body: GestureDetector(
+        onVerticalDragEnd: (details) {
+          if (!game.hasMoreWords) return;
+          final v = details.primaryVelocity ?? 0;
+          if (v < -300) _handleGuess();
+          if (v > 300) _handleSkip();
+        },
+        child: Container(
+          color: const Color(0xFF2D3D8B),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Opacity(
+                  opacity: 0.15,
+                  child: SvgPicture.asset(
+                    'assets/background-frame.svg',
+                    fit: BoxFit.cover,
                   ),
                 ),
-                child: Text(
-                  game.hasMoreWords ? game.currentWord : 'Слова закінчились!',
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 42,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
               ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Statistics
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              SafeArea(
+            child: Column(
               children: [
-                _StatChip(
-                  label: 'Вгадано',
-                  value: game.correctCount.toString(),
-                  color: AppColors.success,
+                // ── Top bar ──────────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          ref.read(timerProvider.notifier).stopTimer();
+                          context.go('/home');
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              teamName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Gilroy',
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 7,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4CAF50),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                '+${game.correctCount}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Gilroy',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      const SizedBox(width: 36),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 16),
-                _StatChip(
-                  label: 'Пропущено',
-                  value: game.skipCount.toString(),
-                  color: AppColors.warning,
+
+                // ── Timer number ──────────────────────────────────────
+                Text(
+                  '$timeRemaining',
+                  style: TextStyle(
+                    color: timeRemaining <= 10 ? Colors.red[300] : Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Gilroy',
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // ── Progress bar ──────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 6,
+                      backgroundColor: Colors.white.withValues(alpha: 0.25),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const Spacer(),
+
+                // ── Guessed hint ──────────────────────────────────────
+                GestureDetector(
+                  onTap: game.hasMoreWords ? _handleGuess : null,
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.keyboard_arrow_up_rounded,
+                        color: Colors.white70,
+                        size: 32,
+                      ),
+                      Text(
+                        'Guessed',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // ── Word card ─────────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: double.infinity,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            game.hasMoreWords
+                                ? game.currentWord
+                                : 'Слова закінчились!',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Gilroy',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // ── Pass hint ─────────────────────────────────────────
+                GestureDetector(
+                  onTap: game.hasMoreWords ? _handleSkip : null,
+                  child: const Column(
+                    children: [
+                      Text(
+                        'Pass',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Colors.white70,
+                        size: 32,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Spacer(),
+
+                // ── Explanation button ────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 28),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.auto_awesome,
+                          color: Color(0xFF2D3D8B),
+                          size: 14,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'Explanation of the word',
+                          style: TextStyle(
+                            color: Color(0xFF2D3D8B),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Gilroy',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-            
-            const Spacer(),
-            
-            // Action Buttons
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  // Skip Button
-                  Expanded(
-                    child: SizedBox(
-                      height: 64,
-                      child: ElevatedButton(
-                        onPressed: game.hasMoreWords ? _handleSkip : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.skipButton,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.skip_next_rounded, size: 28),
-                            SizedBox(width: 8),
-                            Text(
-                              'Пропуск',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(width: 16),
-                  
-                  // Correct Button
-                  Expanded(
-                    child: SizedBox(
-                      height: 64,
-                      child: ElevatedButton(
-                        onPressed: game.hasMoreWords ? _handleGuess : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.correctButton,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.check_circle_rounded, size: 28),
-                            SizedBox(width: 8),
-                            Text(
-                              'Вгадали',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatChip extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-
-  const _StatChip({
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: color.withValues(alpha: 0.8),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+          ),        ],
+          ),        ),
       ),
     );
   }

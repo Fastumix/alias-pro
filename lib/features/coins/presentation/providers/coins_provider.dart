@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import '../../domain/entities/user_coins.dart';
+
 import '../../data/datasources/coins_remote_datasource.dart';
+import '../../domain/entities/user_coins.dart';
 
 final coinsProvider = StateNotifierProvider<CoinsNotifier, UserCoins>((ref) {
   return CoinsNotifier(ref.read(coinsRemoteDatasourceProvider));

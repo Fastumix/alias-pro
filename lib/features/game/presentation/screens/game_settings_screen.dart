@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
 import '../providers/game_settings_provider.dart';
 import '../providers/teams_provider.dart';
 
@@ -87,8 +88,11 @@ class GameSettingsScreen extends ConsumerWidget {
                 color: Color(0xFF2D3D8B),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_back_ios_new,
-                  color: Colors.white, size: 18,),
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
           const Expanded(
@@ -111,8 +115,11 @@ class GameSettingsScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               border: Border.all(color: const Color(0xFF2D3D8B), width: 1.5),
             ),
-            child: const Icon(Icons.info_outline,
-                color: Color(0xFF2D3D8B), size: 20,),
+            child: const Icon(
+              Icons.info_outline,
+              color: Color(0xFF2D3D8B),
+              size: 20,
+            ),
           ),
         ],
       ),
@@ -245,8 +252,11 @@ class GameSettingsScreen extends ConsumerWidget {
                   color: const Color(0xFFDFE5F3),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.grid_view_rounded,
-                    size: 16, color: Color(0xFF1C2659),),
+                child: const Icon(
+                  Icons.grid_view_rounded,
+                  size: 16,
+                  color: Color(0xFF1C2659),
+                ),
               ),
             ],
           ),
@@ -301,7 +311,10 @@ class GameSettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildSoundSection(
-      BuildContext context, WidgetRef ref, GameSettings settings,) {
+    BuildContext context,
+    WidgetRef ref,
+    GameSettings settings,
+  ) {
     const sounds = ['Bambino', 'Trambon', 'Hey Bro', 'Beep', 'Ding'];
     return _card(
       child: Column(
@@ -399,8 +412,7 @@ class GameSettingsScreen extends ConsumerWidget {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              builder: (_) =>
-                  _SoundPicker(sounds: sounds, current: current),
+              builder: (_) => _SoundPicker(sounds: sounds, current: current),
             );
             if (result != null) onChanged(result);
           },
@@ -410,8 +422,11 @@ class GameSettingsScreen extends ConsumerWidget {
               color: const Color(0xFFDFE5F3),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.swap_vert,
-                size: 18, color: Color(0xFF2D3D8B),),
+            child: const Icon(
+              Icons.swap_vert,
+              size: 18,
+              color: Color(0xFF2D3D8B),
+            ),
           ),
         ),
       ],

@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { GameResult } from './game-result.entity';
-import { CategoriesService } from '../categories/categories.service';
-import { SaveGameResultDto } from './dto/save-game-result.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CategoriesService } from "../categories/categories.service";
+import { SaveGameResultDto } from "./dto/save-game-result.dto";
+import { GameResult } from "./game-result.entity";
 
 @Injectable()
 export class GamesService {
@@ -13,7 +13,10 @@ export class GamesService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async saveResult(userId: string, dto: SaveGameResultDto): Promise<GameResult> {
+  async saveResult(
+    userId: string,
+    dto: SaveGameResultDto,
+  ): Promise<GameResult> {
     const category = await this.categoriesService.findOne(dto.categorySlug);
     const result = this.resultsRepo.create({
       userId,
@@ -31,7 +34,7 @@ export class GamesService {
   findUserResults(userId: string): Promise<GameResult[]> {
     return this.resultsRepo.find({
       where: { userId },
-      order: { playedAt: 'DESC' },
+      order: { playedAt: "DESC" },
       take: 50,
     });
   }

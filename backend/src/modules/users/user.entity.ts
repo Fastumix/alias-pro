@@ -1,14 +1,14 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
-@Entity('users')
+@Entity("users")
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ unique: true, nullable: true })
@@ -17,7 +17,7 @@ export class User {
   @Column({ nullable: true, select: false })
   passwordHash: string | null;
 
-  @Column({ default: 'anonymous' })
+  @Column({ default: "anonymous" })
   displayName: string;
 
   @Column({ nullable: true })

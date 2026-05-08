@@ -1,8 +1,10 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../coins/presentation/providers/coins_provider.dart';
 
 enum CategoryTab { level, category, ownLists }
@@ -43,14 +45,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   // Header
                   _buildHeader(coins.balance),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // AI Create Category Card
                   _buildAICard(),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // White background for tabs and list
                   Expanded(
                     child: Container(
@@ -68,16 +70,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           const SizedBox(height: 16),
                           // Tabs
                           _buildTabs(),
-                          
+
                           const SizedBox(height: 16),
-                          
+
                           // Category List
                           Expanded(
-                            child: _selectedTab == CategoryTab.category 
-                              ? _buildCategoryView()
-                              : _buildCategoryList(),
+                            child: _selectedTab == CategoryTab.category
+                                ? _buildCategoryView()
+                                : _buildCategoryList(),
                           ),
-                          
+
                           const SizedBox(height: 100), // Space for nav bar
                         ],
                       ),
@@ -85,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ],
               ),
-              
+
               // Fixed Navigation Bar at bottom
               Positioned(
                 left: 0,
@@ -121,37 +123,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Logo
-          Builder(builder: (context) {
-            final double proVerticalPadding = ((Theme.of(context).textTheme.displayMedium?.fontSize ?? 32) * 0.09).clamp(3.0, 8.0);
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                SvgPicture.asset(
-                  'assets/logo.svg',
-                  width: 110,
-                  height: 39,
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: proVerticalPadding),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA3AFF3),
-                    borderRadius: BorderRadius.circular(18),
+          Builder(
+            builder: (context) {
+              final double proVerticalPadding =
+                  ((Theme.of(context).textTheme.displayMedium?.fontSize ?? 32) *
+                          0.09)
+                      .clamp(3.0, 8.0);
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SvgPicture.asset(
+                    'assets/logo.svg',
+                    width: 110,
+                    height: 39,
                   ),
-                  child: const Text(
-                    'pro',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1C2659),
-                      fontFamily: 'Gilroy',
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 10, vertical: proVerticalPadding),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA3AFF3),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Text(
+                      'pro',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1C2659),
+                        fontFamily: 'Gilroy',
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },),
-          
+                ],
+              );
+            },
+          ),
+
           // Coins
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -205,7 +213,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       height: 145,
-      decoration: BoxDecoration(color: const Color(0xFF2D3D8B), borderRadius: BorderRadius.circular(24)),
+      decoration: BoxDecoration(
+          color: const Color(0xFF2D3D8B),
+          borderRadius: BorderRadius.circular(24)),
       child: Stack(
         children: [
           Padding(
@@ -216,7 +226,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: const Color(0xFFDFE5F3),
                         borderRadius: BorderRadius.circular(12),
@@ -243,7 +254,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(12),
@@ -325,7 +337,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildTabs() {
     final isCategoryTab = _selectedTab == CategoryTab.category;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -369,16 +381,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildTab(String text, CategoryTab tab, {IconData? icon, String? iconPath}) {
+  Widget _buildTab(String text, CategoryTab tab,
+      {IconData? icon, String? iconPath}) {
     final isSelected = _selectedTab == tab;
     final isCategoryTab = _selectedTab == CategoryTab.category;
-    
+
     return GestureDetector(
       onTap: () => setState(() => _selectedTab = tab),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? (isCategoryTab ? Colors.white : const Color(0xFF2D3D8B))
               : (isCategoryTab ? const Color(0xFF2D3D8B) : Colors.transparent),
           borderRadius: BorderRadius.circular(20),
@@ -444,7 +457,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -476,7 +490,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ],
                     ),
                   ),
-                  
+
                   // Placeholder for image
                   Container(
                     height: 170,
@@ -488,13 +502,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: const Center(
                       child: Text(
                         'Image placeholder',
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Gilroy'),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Gilroy'),
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   // Word chips
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -510,9 +527,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ],
                     ),
                   ),
-                  
+
                   const Spacer(),
-                  
+
                   // Play button
                   Padding(
                     padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
@@ -655,148 +672,152 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ? null
           : () => context.push('/team/$levelId'),
       child: Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: textColor,
-                  borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: textColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    level,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Gilroy',
+                    ),
+                  ),
                 ),
+                if (isDemo) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: textColor.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/time-icon.svg',
+                          width: 14,
+                          height: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Demo',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Gilroy',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                if (isLocked) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/lock.svg',
+                          width: 14,
+                          height: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Close',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const Spacer(),
+                ImageFiltered(
+                  imageFilter: isLocked
+                      ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5)
+                      : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/docs-icon.svg',
+                          width: 16,
+                          height: 16,
+                          colorFilter: const ColorFilter.mode(
+                            Color(0xFF2D3D8B),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          wordCount.toString(),
+                          style: const TextStyle(
+                            color: Color(0xFF2D3D8B),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Gilroy',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: ImageFiltered(
+                imageFilter: isLocked
+                    ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5)
+                    : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
                 child: Text(
-                  level,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  description,
+                  style: TextStyle(
+                    color: textColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Gilroy',
                   ),
                 ),
               ),
-              if (isDemo) ...[
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: textColor.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/time-icon.svg',
-                        width: 14,
-                        height: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'Demo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              if (isLocked) ...[
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/lock.svg',
-                        width: 14,
-                        height: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'Close',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              const Spacer(),
-              ImageFiltered(
-                imageFilter: isLocked 
-                    ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5) 
-                    : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/docs-icon.svg',
-                        width: 16,
-                        height: 16,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF2D3D8B),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        wordCount.toString(),
-                        style: const TextStyle(
-                          color: Color(0xFF2D3D8B),
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Gilroy',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.all(2),
-            child: ImageFiltered(
-              imageFilter: isLocked 
-                  ? ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5) 
-                  : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-              child: Text(
-                description,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Gilroy',
-                ),
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 
@@ -841,7 +862,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       );
     }
-    
+
     return Container(
       key: const ValueKey('navbar'),
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
@@ -866,66 +887,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 _isNavExpanded = true;
               });
             },
-            child: Builder(builder: (context) {
-              final isSelected = _selectedNavIndex == 0;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(99),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/main-icon.svg',
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        isSelected ? Colors.white : Colors.black,
-                        BlendMode.srcIn,
+            child: Builder(
+              builder: (context) {
+                final isSelected = _selectedNavIndex == 0;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? const Color(0xFF2D3D8B)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/main-icon.svg',
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          isSelected ? Colors.white : Colors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
-                    ),
-                    AnimatedSize(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: _isNavExpanded && isSelected
-                          ? const Row(
-                              children: [
-                                SizedBox(width: 8),
-                                Text(
-                                  'Game',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Gilroy',
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: _isNavExpanded && isSelected
+                            ? const Row(
+                                children: [
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Game',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Gilroy',
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
-                ),
-              );
-            },),
-          ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedNavIndex = 1;
-                  _isNavExpanded = true;
-                });
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: Builder(builder: (context) {
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedNavIndex = 1;
+                _isNavExpanded = true;
+              });
+            },
+            child: Builder(
+              builder: (context) {
                 final isSelected = _selectedNavIndex == 1;
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+                    color: isSelected
+                        ? const Color(0xFF2D3D8B)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(99),
                   ),
                   child: Row(
@@ -961,23 +991,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 );
-              },),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedNavIndex = 2;
-                  _isNavExpanded = true;
-                });
               },
-              child: Builder(builder: (context) {
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedNavIndex = 2;
+                _isNavExpanded = true;
+              });
+            },
+            child: Builder(
+              builder: (context) {
                 final isSelected = _selectedNavIndex == 2;
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFF2D3D8B) : Colors.transparent,
+                    color: isSelected
+                        ? const Color(0xFF2D3D8B)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(99),
                   ),
                   child: Row(
@@ -1013,24 +1048,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 );
-              },),
+              },
             ),
-            _buildNavItem(Icons.settings_outlined, '', 3),
-          ],
-        ),
-      );
+          ),
+          _buildNavItem(Icons.settings_outlined, '', 3),
+        ],
+      ),
+    );
   }
 
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isSelected = _selectedNavIndex == index;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedNavIndex = index;
           _isNavExpanded = true;
         });
-        
+
         if (index == 2) {
           // Home already
         } else if (index == 3) {

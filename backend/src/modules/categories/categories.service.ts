@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Category } from './category.entity';
-import { Word } from '../games/word.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Word } from "../games/word.entity";
+import { Category } from "./category.entity";
 
 @Injectable()
 export class CategoriesService {
@@ -27,9 +27,9 @@ export class CategoriesService {
   async getWords(categorySlug: string, limit = 50): Promise<Word[]> {
     const cat = await this.findOne(categorySlug);
     return this.wordsRepo
-      .createQueryBuilder('word')
-      .where('word.categoryId = :id', { id: cat.id })
-      .orderBy('RANDOM()')
+      .createQueryBuilder("word")
+      .where("word.categoryId = :id", { id: cat.id })
+      .orderBy("RANDOM()")
       .limit(limit)
       .getMany();
   }

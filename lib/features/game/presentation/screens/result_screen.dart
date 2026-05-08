@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../shared/utils/colors.dart';
 import '../../../../shared/widgets/custom_button.dart';
+import '../../../profile/data/datasources/local_storage_datasource.dart';
+import '../../data/datasources/game_results_remote_datasource.dart';
 import '../providers/game_provider.dart';
 import '../providers/game_settings_provider.dart';
 import '../providers/teams_provider.dart';
-import '../../../profile/data/datasources/local_storage_datasource.dart';
-import '../../data/datasources/game_results_remote_datasource.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
   const ResultScreen({super.key});
@@ -44,11 +45,11 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
       final teamName = teams.isNotEmpty ? teams.first : 'Team';
       unawaited(
         ref.read(gameResultsRemoteDatasourceProvider).saveResult(
-          result: gameResult,
-          teamName: teamName,
-          round: 1,
-          timeRound: settings.timeRound,
-        ),
+              result: gameResult,
+              teamName: teamName,
+              round: 1,
+              timeRound: settings.timeRound,
+            ),
       );
 
       setState(() {
@@ -60,7 +61,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   void _handlePlayAgain() {
     final game = ref.read(gameProvider);
     ref.read(gameProvider.notifier).resetGame();
-    
+
     if (game != null) {
       context.go('/game/${game.categoryId}');
     } else {
@@ -103,24 +104,24 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              
+
               // Game Over Title
               const Icon(
                 Icons.emoji_events_rounded,
                 size: 80,
                 color: AppColors.warning,
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               Text(
                 'Гра закінчена!',
                 style: Theme.of(context).textTheme.displayMedium,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 48),
-              
+
               // Score Display
               Container(
                 padding: const EdgeInsets.all(32),
@@ -154,9 +155,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Statistics
               Row(
                 children: [
@@ -179,9 +180,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                   ),
                 ],
               ),
-              
+
               const Spacer(),
-              
+
               // Action Buttons
               CustomButton(
                 text: 'Грати ще',
@@ -189,9 +190,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 isExpanded: true,
                 icon: Icons.replay_rounded,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               CustomButton(
                 text: 'На головну',
                 onPressed: _handleGoHome,

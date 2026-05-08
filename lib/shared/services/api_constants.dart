@@ -18,7 +18,8 @@ class ApiConstants {
 
   // Games
   static const String gameResults = '$v1/games/results';
-  static String gameWords(String categorySlug) => '$v1/games/words/$categorySlug';
+  static String gameWords(String categorySlug) =>
+      '$v1/games/words/$categorySlug';
 
   // Categories
   static const String categories = '$v1/categories';

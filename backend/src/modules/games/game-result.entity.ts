@@ -1,28 +1,28 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-} from 'typeorm';
-import { User } from '../users/user.entity';
-import { Category } from '../categories/category.entity';
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from "typeorm";
+import { Category } from "../categories/category.entity";
+import { User } from "../users/user.entity";
 
-@Entity('game_results')
+@Entity("game_results")
 export class GameResult {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => User, { onDelete: 'SET NULL', nullable: true })
-  @JoinColumn({ name: 'userId' })
+  @ManyToOne(() => User, { onDelete: "SET NULL", nullable: true })
+  @JoinColumn({ name: "userId" })
   user: User | null;
 
   @Column({ nullable: true })
   userId: string | null;
 
-  @ManyToOne(() => Category, { onDelete: 'SET NULL', nullable: true })
-  @JoinColumn({ name: 'categoryId' })
+  @ManyToOne(() => Category, { onDelete: "SET NULL", nullable: true })
+  @JoinColumn({ name: "categoryId" })
   category: Category | null;
 
   @Column({ nullable: true })
@@ -43,7 +43,7 @@ export class GameResult {
   @Column({ default: 0 })
   skipCount: number;
 
-  @Column({ type: 'int', default: 60 })
+  @Column({ type: "int", default: 60 })
   timeRound: number;
 
   @CreateDateColumn()

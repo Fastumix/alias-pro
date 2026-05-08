@@ -65,7 +65,9 @@ class GameStartScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10,),
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(40),
@@ -129,7 +131,9 @@ class _StartGameButton extends StatelessWidget {
           color: Colors.white.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(40),
           border: Border.all(
-              color: Colors.white.withValues(alpha: 0.25), width: 1,),
+            color: Colors.white.withValues(alpha: 0.25),
+            width: 1,
+          ),
         ),
         child: Row(
           children: [
@@ -157,14 +161,17 @@ class _StartGameButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 20),
               child: Row(
-                children: List.generate(3, (i) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 1),
-                  child: Icon(
-                    Icons.chevron_right_rounded,
-                    color: Colors.white.withValues(alpha: 0.25 + i * 0.3),
-                    size: 24,
+                children: List.generate(
+                  3,
+                  (i) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      color: Colors.white.withValues(alpha: 0.25 + i * 0.3),
+                      size: 24,
+                    ),
                   ),
-                ),),
+                ),
               ),
             ),
           ],

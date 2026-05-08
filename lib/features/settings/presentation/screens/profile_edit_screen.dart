@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/settings_provider.dart';
+
 import '../../../../shared/theme/app_theme.dart';
+import '../providers/settings_provider.dart';
 
 class ProfileEditScreen extends ConsumerStatefulWidget {
   const ProfileEditScreen({super.key});
@@ -15,9 +16,21 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   String? _selectedAvatar;
 
   final List<String> _avatars = [
-    '😀', '😎', '🤓', '😇', '🥳',
-    '🤩', '🚀', '⚡', '🔥', '⭐',
-    '🎮', '🎯', '🏆', '👑', '💎',
+    '😀',
+    '😎',
+    '🤓',
+    '😇',
+    '🥳',
+    '🤩',
+    '🚀',
+    '⚡',
+    '🔥',
+    '⭐',
+    '🎮',
+    '🎯',
+    '🏆',
+    '👑',
+    '💎',
   ];
 
   @override
@@ -44,9 +57,11 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
     }
 
     await ref.read(settingsProvider.notifier).updateUserName(name);
-    
+
     if (_selectedAvatar != null) {
-      await ref.read(settingsProvider.notifier).updateAvatarUrl(_selectedAvatar!);
+      await ref
+          .read(settingsProvider.notifier)
+          .updateAvatarUrl(_selectedAvatar!);
     }
 
     if (mounted) {
@@ -106,7 +121,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             itemBuilder: (context, index) {
               final avatar = _avatars[index];
               final isSelected = avatar == _selectedAvatar;
-              
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -115,7 +130,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isSelected 
+                    color: isSelected
                         ? AppTheme.primaryColor.withValues(alpha: 0.2)
                         : Colors.grey[200],
                     borderRadius: BorderRadius.circular(12),

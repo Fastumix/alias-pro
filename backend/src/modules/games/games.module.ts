@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { GameResult } from './game-result.entity';
-import { Word } from './word.entity';
-import { GamesService } from './games.service';
-import { GamesController } from './games.controller';
-import { CategoriesModule } from '../categories/categories.module';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { CategoriesModule } from "../categories/categories.module";
+import { GameResult } from "./game-result.entity";
+import { GamesController } from "./games.controller";
+import { GamesService } from "./games.service";
+import { Word } from "./word.entity";
 
 @Module({
   imports: [TypeOrmModule.forFeature([GameResult, Word]), CategoriesModule],
